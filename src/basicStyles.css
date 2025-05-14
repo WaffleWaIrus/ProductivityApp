@@ -1,0 +1,22 @@
+#all{
+    height: 270px;
+    width: 480px;
+    image-rendering: pixelated;
+    background-color: black;
+    display: grid;
+}
+#all div{
+    width: 80px;
+    height: 80px;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+}
