@@ -1,13 +1,12 @@
 #all{
-    height: 270px;
-    width: 480px;
+    height: 180px;
+    width: 320px;
     image-rendering: pixelated;
     background-color: black;
+    background-image: url("../src/images/uiDesignBG.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     display: grid;
-}
-#all div{
-    width: 80px;
-    height: 80px;
 }
 html, body{
     height: 100%;
@@ -19,4 +18,42 @@ body{
     justify-content: center;
     align-items: center;
     margin: 0px;
+    background-color: #0a0612;
 }
+.widget:hover{
+    cursor: pointer;
+}
+#uiDesign1{
+    position: absolute;
+    top: 14px;
+    left: 14px;
+}
+#uiDesign2{
+    position: absolute;
+    top: 14px;
+    left: 93px;
+}
+#uiDesign3{
+    position: absolute;
+    top: 90px;
+    left: 14px;
+}
+#uiDesign3:hover{
+    cursor: auto;
+}
+#uiDesign4{
+    position: absolute;
+    top: 14px;
+    left: 159px;
+}
+#uiDesign5{
+    position: absolute;
+    top: 14px;
+    left: 251px;
+}
+#uiDesign6{
+    position: absolute;
+    top: 90px;
+    left: 251px;
+}
+

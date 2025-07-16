@@ -1,0 +1,26 @@
+#all{
+    height: 180px;
+    width: 320px;
+    image-rendering: pixelated;
+    background-color: black;
+    background-image: url("../src/images/uiDesignBG.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: grid;
+    will-change: transform;
+}
+#all div{
+    image-rendering: pixelated;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+    background-color: #0a0612;
+}

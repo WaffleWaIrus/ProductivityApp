@@ -3,10 +3,11 @@
 <head>
      <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
+    <!-- CSP for development ONLY -->
+    <meta 
+      http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <!--TODO: remove 'unsafe-inline'-->
     <meta
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -17,14 +18,14 @@
 </head>
 <body>
     <div id="all">
-        <div id="red"></div>
-        <div id=" orange"></div>
-        <div id=" yellow"></div>
-        <div id=" green"></div>
-        <div id=" blue"></div>
-        <div id=" indigo"></div>
-        <div id=" violet"></div>
+        <img src="../src/images/uiDesign1.png" id="uiDesign1" class="widget">
+        <img src="../src/images/uiDesign2.png" id="uiDesign2" class="widget">
+        <img src="../src/images/uiDesign3.png" id="uiDesign3" class="widget">
+        <img src="../src/images/uiDesign4.png" id="uiDesign4" class="widget">
+        <img src="../src/images/uiDesign5.png" id="uiDesign5" class="widget">
+        <img src="../src/images/uiDesign6.png" id="uiDesign6" class="widget">
     </div>
     <script src="../src/mainMenu.js"></script>
+    <script src="../src/screenSize.js"></script>
 </body>
 </html>
