@@ -24,3 +24,16 @@ body{
     margin: 0px;
     background-color: #0a0612;
 }
+#create{
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background-color: #0a0612;
+    left: 145px;
+    top: 150px;
+}
+.noteEntry{
+    background-color: aqua;
+    width: 30px;
+    height: 30px;
+}

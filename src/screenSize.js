@@ -12,8 +12,9 @@ function fixScreenSize(){
     //TODO: don't get the height from "all" get it from the asset itself.
     screenRatio = window.innerWidth / window.innerHeight; //Ratio of the window
     desiredRatio = allWidth / allHeight; //Ratio of the background
-    scaleFactor = screenRatio < desiredRatio ? Math.floor(window.innerWidth / allWidth) : Math.floor(window.innerHeight / allHeight);
-    document.getElementById("all").style.transform = 
-    "scale(" + scaleFactor +")";
-    console.log("ran on notes")
+    scaleFactor = screenRatio < desiredRatio ? Math.floor(window.innerWidth / allWidth): Math.floor(window.innerHeight / allHeight);
+    // document.getElementById("all").style.transform = 
+    // "scale(" + scaleFactor +")";
+    // console.log("ran on notes")
+    document.getElementById("all").style.zoom = scaleFactor*100 + "%";
 }
