@@ -1,20 +1,24 @@
 
 document.addEventListener('DOMContentLoaded', ()=>{
+    init()
     fixScreenSize()
 });
 window.addEventListener('resize', fixScreenSize);
+let allWidth;
+let allHeight;
 
-const allWidth = parseInt(getComputedStyle(document.getElementById("all")).width);
-const allHeight = parseInt(getComputedStyle(document.getElementById("all")).height);
-
+function init(){
+    console.log("ran0");
+    const all = document.getElementById("all");
+    allWidth = parseInt(getComputedStyle(all).width);
+    allHeight = parseInt(getComputedStyle(all).height);
+    console.log("ran");
+}
 function fixScreenSize(){
-    //get the number of pixels used for the background and the height of the users screen and scale the background
-    //TODO: don't get the height from "all" get it from the asset itself.
-    screenRatio = window.innerWidth / window.innerHeight; //Ratio of the window
-    desiredRatio = allWidth / allHeight; //Ratio of the background
-    scaleFactor = screenRatio < desiredRatio ? Math.floor(window.innerWidth / allWidth): Math.floor(window.innerHeight / allHeight);
-    // document.getElementById("all").style.transform = 
-    // "scale(" + scaleFactor +")";
-    // console.log("ran on notes")
+    let screenRatio = window.innerWidth / window.innerHeight; //Ratio of the window
+    const desiredRatio = allWidth / allHeight; //Ratio of the background
+    let scaleFactor = screenRatio < desiredRatio ? Math.floor(window.innerWidth / allWidth): Math.floor(window.innerHeight / allHeight);
+    console.log(window.innerWidth/allWidth);
+    console.log("allwidth: " + allWidth);
     document.getElementById("all").style.zoom = scaleFactor*100 + "%";
 }
