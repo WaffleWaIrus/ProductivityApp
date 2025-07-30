@@ -1,0 +1,39 @@
+Other:
+Change pixelText to be more efficient (includes renaming all your files to ASCII ;-;)
+
+Styles For Pixel Text:
+
+Padding
+Padding Left
+Padding Right
+Padding Top
+Padding Bottom
+Margin
+Margin Left
+Margin Right
+Margin Top
+Margin Bottom
+    NOTE: these affect this.width
+
+Color
+
+text align:
+center // maybe don't do because perfect centering can't really be achieved everytime
+Left
+Right
+    NOTE: find the empty space at the end of every line and then shift all the letters on that line that many pixels
+
+Font size ;-;
+    Any font sizes that are a multiple of 5 can just be doubled in size
+    Create fonts for 6, 7,8,9 pixels too ig- start with like 7 or 8 though to have good range.
+
+Tags:
+    
+-Add a way to change font color for a section- like pixel span tags
+    -Also underlining
+-Input boxes
+-Radio Buttons
+-Links
+-unordered & ordered lists
+?label
+-break tag

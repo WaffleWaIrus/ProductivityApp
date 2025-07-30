@@ -85,17 +85,24 @@ let charWidths = {
     "Enter": 0
 }
 class PixelParagraph extends HTMLElement{
-    static shadow;
-    static mutObserver;
-    static width;
-    static shadowDiv;
     constructor(){
         super();
         this.shadow = this.attachShadow({mode: "open"});//create shadow DOM
-        this.mutObserver = new MutationObserver(this.addLetters)
+        this.mutObserver = new MutationObserver(this.addLetters);
+        this.currentCursorPos = [0,0];
+        this.shadowDiv = document.createElement("div");
+        this.outerShadowDiv = document.createElement("div");
+        this.outerShadowDiv.id = "outerShadowDiv";
+        this.shadowDiv.id = "shadowDiv";
+        this.styleElem = document.createElement("style");
+        this.bottom = 5;
+        this.right =0;
     }
     //runs each time the element is added to the DOM
     connectedCallback(){
+        this.outerShadowDiv.style.padding = "10px";
+        this.shadowRoot.appendChild(this.styleElem);
+        this.shadowRoot.appendChild(this.outerShadowDiv);
         this.mutObserver.observe(this, {
             subtree: true,
             childList: true,
@@ -108,49 +115,66 @@ class PixelParagraph extends HTMLElement{
     }
     //add the letters to the element
     addLetters(){
-        this.shadowRoot.innerHTML = "";
-        let potentialWidth =this.getBoundingClientRect().width; 
+        this.shadowDiv.innerHTML = "";
+        let potentialWidth =this.getBoundingClientRect().width - parseInt(this.outerShadowDiv.style.padding); 
         this.width = potentialWidth >0? potentialWidth: this.parentElement.getBoundingClientRect().width;
         console.log(this.width);
-        const height = this.style.height;
-        let letters = this.innerHTML.split('');
+        // let letters = this.innerHTML.split('');
+        let words = this.innerHTML.split(' ');
         //make shadowDiv attatched to shadow
-        this.shadowDiv = document.createElement("div");
         this.shadowDiv.style.position = "relative";
-        this.shadowRoot.appendChild(this.shadowDiv);
-        //go through each letter, append its pixelArt variant to shadowDiv
-        for (let i=0; i< letters.length;i++){
-            let letter = this.addLetter(letters[i]);
-            this.shadowDiv.appendChild(letter);
+        this.outerShadowDiv.appendChild(this.shadowDiv);
+        for (let i=0; i< words.length; i++){
+            this.addWord(words[i]);
         }
-        this.style.display = "block"
-        //if pose > width, move down a line
+        this.style.display = "block";
+        this.style.width = this.right + "px";
+        this.shadowDiv.style.width = this.right + "px";
+        this.style.height = this.bottom + "px";
+        this.shadowDiv.style.height = this.bottom + "px";
+    }
+    addWord(word){
+        let letterElements = [];
+        let letters = word.split('');
+        letterElements[0] = this.addLetter(letters[0]);
+        let goOver = letterElements[0][1];
+        let firstLeft = letterElements[0][2];
+        for (let i=1; i< letters.length;i++){
+            let letter = this.addLetter(letters[i]);
+            letterElements[i] =  letter;
+            if (letter[1]) goOver = true;
+        }
+        if(goOver){
+            for (let i=0; i< letterElements.length; i++){
+                letterElements[i][0].style.left = letterElements[i][2] -firstLeft + "px";
+                letterElements[i][0].style.top = letterElements[i][3] + 7 + "px";
+                this.shadowDiv.appendChild(letterElements[i][0]);
+                if (i== letterElements.length - 1) {
+                    this.currentCursorPos[0] = letterElements[i][2] -firstLeft +1;
+                    this.currentCursorPos[1] = letterElements[i][3] + 7;
+                    this.bottom = this.currentCursorPos[1] + 5;
+                }
+            }
+        }else{
+            for (let i=0; i< letterElements.length; i++){
+                this.shadowDiv.appendChild(letterElements[i][0]);
+            }
+        }
+        this.currentCursorPos[0] += 2;
     }
     addLetter(letter){
+    let goOver = false;
+    let left = 0;
     let moveOver = 0;
     let moveDown = 0;
-    let currentCursorPos = [0,0];
-    if (this.shadowDiv.childNodes.length > 0){
-        let newLastChar = this.shadowDiv.lastChild;
-        let newLastCharStyle = getComputedStyle(newLastChar);
-        currentCursorPos[0] = parseInt(newLastCharStyle.left) + parseInt(newLastCharStyle.width) + 1;
-        console.log("left: " + parseInt(newLastCharStyle.left) + " width: " + parseInt(newLastCharStyle.width))
-        //if the top of the last character is not in line, move the cursor down one
-        if ((parseInt(newLastCharStyle.top))% 7 != 0){
-            currentCursorPos[1] = parseInt(newLastCharStyle.top) -1;
-        } else{
-            currentCursorPos[1] = parseInt(newLastCharStyle.top);
-        }
-    }
     //if the letter is not valid, forget abt this and move on.
     if (!charWidths[letter]){
         console.log("invalid character " + letter + "used");
         return;
     } 
 
-    if (currentCursorPos[0] + charWidths[letter] > this.width){
-        currentCursorPos[0] = 0
-        currentCursorPos[1] += 7; // Move down to the next line
+    if (this.currentCursorPos[0] + charWidths[letter] > this.width){
+        goOver = true;
     }
     if ((letter == "g" || letter == "y" || letter == "q" || letter == "p" || letter == ",")){
         moveDown = 1;
@@ -158,16 +182,17 @@ class PixelParagraph extends HTMLElement{
     if(letter == ","){
         moveOver = -1;
     }
-    console.log(currentCursorPos[0]);
     let newLetter = document.createElement("div");
     newLetter.style.imageRendering = "pixelated";
     newLetter.style.position = "absolute";
     newLetter.style.height = "5px";
-    newLetter.style.left = currentCursorPos[0] + moveOver + "px";
-    newLetter.style.top = (currentCursorPos[1] + moveDown) + "px";
+    newLetter.style.left = this.currentCursorPos[0] + moveOver + "px";
+    newLetter.style.top = (this.currentCursorPos[1] + moveDown) + "px";
     newLetter.style.width = charWidths[letter] + "px";
-    if (letter == ' ' && currentCursorPos[0] == 0)  "0px";
-    
+    left = this.currentCursorPos[0] + moveOver;
+    let top = this.currentCursorPos[1] +moveDown;
+    let width = charWidths[letter];
+    this.currentCursorPos[0] = left + charWidths[letter] +1
     moveDown = 0;
     switch(letter){
         case " ":
@@ -178,32 +203,17 @@ class PixelParagraph extends HTMLElement{
         case "?":
             newLetter.style.backgroundImage = "url('../src/images/qmark.png')";
             break;
-        case "!":
-            newLetter.style.backgroundImage = "url('../src/images/!.png')";
-            break;
-        case ",":
-            newLetter.style.backgroundImage = "url('../src/images/,.png')";
-            break;
         case "#":
             newLetter.style.backgroundImage = "url('../src/images/hashtag.png')";
             break;
         case "%":
             newLetter.style.backgroundImage = "url('../src/images/percent.png')";
             break;
-        case "$":
-            newLetter.style.backgroundImage = "url('../src/images/$.png')";
-            break;
-        case "(":
-            newLetter.style.backgroundImage = "url('../src/images/(.png')";
-            break;
         case ")":
             newLetter.style.backgroundImage = "url('../src/images/closedparen.png')";
             break;
         case "[":
             newLetter.style.backgroundImage = "url('../src/images/openBracket.png')";
-            break;
-        case "]":
-            newLetter.style.backgroundImage = "url('../src/images/].png')";
             break;
         case "~":
             newLetter.style.backgroundImage = "url('../src/images/tilde.png')";
@@ -217,16 +227,8 @@ class PixelParagraph extends HTMLElement{
         case "{":
             newLetter.style.backgroundImage = "url('../src/images/openBrace.png')";
             break;
-        case "}":
-            newLetter.style.backgroundImage = "url('../src/images/}.png')";
-            break;
-        case "^":
-            newLetter.style.backgroundImage = "url('../src/images/^.png')";
         case ":":
             newLetter.style.backgroundImage = "url('../src/images/colon.png')";
-            break;
-        case ";":
-            newLetter.style.backgroundImage = "url('../src/images/;.png')";
             break;
         default:
         if(/[a-z]/.test(letter)){  
@@ -235,8 +237,9 @@ class PixelParagraph extends HTMLElement{
         else newLetter.style.backgroundImage = "url('../src/images/" + letter +".png')"; 
         break;
     }
-    return newLetter
+    if (left + width > this.right) this.right = left + width;
+    return [newLetter, goOver, left,top];
     }
 }
 
-customElements.define("pixel-p", PixelParagraph);
+customElements.define("pixel-text", PixelParagraph);
