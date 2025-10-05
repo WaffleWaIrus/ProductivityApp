@@ -84,6 +84,11 @@ let charWidths = {
     "Tab": 8,
     "Enter": 0
 }
+let cssTemplate = `
+    #outerShadowDiv{
+        padding: var(--pixel-padding, 0px);
+    }
+`
 class PixelParagraph extends HTMLElement{
     constructor(){
         super();
@@ -100,7 +105,8 @@ class PixelParagraph extends HTMLElement{
     }
     //runs each time the element is added to the DOM
     connectedCallback(){
-        this.outerShadowDiv.style.padding = "10px";
+        // this.outerShadowDiv.style.padding = "10px";
+        this.styleElem.innerHTML = cssTemplate;
         this.shadowRoot.appendChild(this.styleElem);
         this.shadowRoot.appendChild(this.outerShadowDiv);
         this.mutObserver.observe(this, {
@@ -116,9 +122,9 @@ class PixelParagraph extends HTMLElement{
     //add the letters to the element
     addLetters(){
         this.shadowDiv.innerHTML = "";
-        let potentialWidth =this.getBoundingClientRect().width - parseInt(this.outerShadowDiv.style.padding); 
+        let potentialWidth =this.getBoundingClientRect().width - 2*parseInt(getComputedStyle(this.styleElem).getPropertyValue("--pixel-padding"));
         this.width = potentialWidth >0? potentialWidth: this.parentElement.getBoundingClientRect().width;
-        console.log(this.width);
+        console.log("ahhhh: " + this.width);
         // let letters = this.innerHTML.split('');
         let words = this.innerHTML.split(' ');
         //make shadowDiv attatched to shadow
