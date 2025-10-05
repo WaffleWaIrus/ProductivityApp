@@ -1,2 +1,2 @@
 # ProductivityApp
- A cute little pixel art productivity app project for personl learning and, well, productivity.
+ A cute little pixel art productivity app project for personal learning and, well, productivity. Currently a work in progress. I may continue this over next Summer break but it's unlikely. Progress as of 10/5/2025: There's a system in place for typing, screen resizing, and a homepage. The UI will remain "pixel perfect" at all times which I have not found support for for websites elsewhere. 
